@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing Button Toy</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; max-width: 500px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    button { padding: 6px 12px; cursor: pointer; }
+    #total { margin-top: 20px; font-size: 1.4em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Price Selector</h2>
+
+  <table>
+    <tr>
+      <th>Item</th>
+      <th>Original Price</th>
+      <th>20%</th>
+      <th>50%</th>
+    </tr>
+    <tr>
+      <td>Shirts</td>
+      <td><button onclick="add(25)">$25</button></td>
+      <td><button onclick="add(20)">$20.00</button></td>
+      <td><button onclick="add(12.5)">$12.50</button></td>
+    </tr>
+    <tr>
+      <td>Premium Beanies</td>
+      <td><button onclick="add(20)">$20</button></td>
+      <td><button onclick="add(16)">$16.00</button></td>
+      <td><button onclick="add(10)">$10.00</button></td>
+    </tr>
+    <tr>
+      <td>Light Beanies</td>
+      <td><button onclick="add(15)">$15</button></td>
+      <td><button onclick="add(12)">$12.00</button></td>
+      <td><button onclick="add(7.5)">$7.50</button></td>
+    </tr>
+    <tr>
+      <td>Tumblers</td>
+      <td><button onclick="add(20)">$20</button></td>
+      <td><button onclick="add(16)">$16.00</button></td>
+      <td><button onclick="add(10)">$10.00</button></td>
+    </tr>
+    <tr>
+      <td>Mugs</td>
+      <td><button onclick="add(15)">$15</button></td>
+      <td><button onclick="add(12)">$12.00</button></td>
+      <td><button onclick="add(7.5)">$7.50</button></td>
+    </tr>
+    <tr>
+      <td>Boxes</td>
+      <td><button onclick="add(10)">$10</button></td>
+      <td><button onclick="add(8)">$8.00</button></td>
+      <td><button onclick="add(5)">$5.00</button></td>
+    </tr>
+  </table>
+
+  <button onclick="clearTotal()" style="margin-top:15px; padding:8px 14px;">Clear All</button>
+
+  <div id="total">Total: $0.00</div>
+
+  <script>
+    let total = 0;
+    function clearTotal() {
+      total = 0;
+      document.getElementById('total').textContent = `Total: $0.00`;
+    }
+
+    function add(amount) {
+      total += amount;
+      document.getElementById('total').textContent = `Total: $${total.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
