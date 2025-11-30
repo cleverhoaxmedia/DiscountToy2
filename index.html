@@ -1,80 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing Button Toy</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    table { border-collapse: collapse; width: 100%; max-width: 500px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    button { padding: 6px 12px; cursor: pointer; }
-    #total { margin-top: 20px; font-size: 1.4em; font-weight: bold; }
-  </style>
+<meta charset="UTF-8">
+<title>Discount Calculator</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    table { border-collapse: collapse; width: 450px; }
+    th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
+    button { padding: 5px 10px; cursor: pointer; }
+    #summary { margin-top: 20px; }
+</style>
 </head>
 <body>
-  <h2>Price Selector</h2>
 
-  <table>
-    <tr>
-      <th>Item</th>
-      <th>Original Price</th>
-      <th>20%</th>
-      <th>50%</th>
-    </tr>
-    <tr>
-      <td>Shirts</td>
-      <td><button onclick="add(25)">$25</button></td>
-      <td><button onclick="add(20)">$20.00</button></td>
-      <td><button onclick="add(12.5)">$12.50</button></td>
-    </tr>
-    <tr>
-      <td>Premium Beanies</td>
-      <td><button onclick="add(20)">$20</button></td>
-      <td><button onclick="add(16)">$16.00</button></td>
-      <td><button onclick="add(10)">$10.00</button></td>
-    </tr>
-    <tr>
-      <td>Light Beanies</td>
-      <td><button onclick="add(15)">$15</button></td>
-      <td><button onclick="add(12)">$12.00</button></td>
-      <td><button onclick="add(7.5)">$7.50</button></td>
-    </tr>
-    <tr>
-      <td>Tumblers</td>
-      <td><button onclick="add(20)">$20</button></td>
-      <td><button onclick="add(16)">$16.00</button></td>
-      <td><button onclick="add(10)">$10.00</button></td>
-    </tr>
-    <tr>
-      <td>Mugs</td>
-      <td><button onclick="add(15)">$15</button></td>
-      <td><button onclick="add(12)">$12.00</button></td>
-      <td><button onclick="add(7.5)">$7.50</button></td>
-    </tr>
-    <tr>
-      <td>Boxes</td>
-      <td><button onclick="add(10)">$10</button></td>
-      <td><button onclick="add(8)">$8.00</button></td>
-      <td><button onclick="add(5)">$5.00</button></td>
-    </tr>
-  </table>
+<h2>Discount Calculator</h2>
 
-  <button onclick="clearTotal()" style="margin-top:15px; padding:8px 14px;">Clear All</button>
+<table>
+    <tr>
+        <th>Item</th>
+        <th>Original Price</th>
+        <th>25%</th>
+        <th>50%</th>
+    </tr>
+    <tr>
+        <td>Shirts</td>
+        <td><button onclick="addValue('Shirts - Original', 25)">25</button></td>
+        <td><button onclick="addValue('Shirts - 25%', 18.75)">18.75</button></td>
+        <td><button onclick="addValue('Shirts - 50%', 12.50)">12.50</button></td>
+    </tr>
+    <tr>
+        <td>Premium Beanies</td>
+        <td><button onclick="addValue('Premium Beanies - Original', 20)">20</button></td>
+        <td><button onclick="addValue('Premium Beanies - 25%', 15)">15.00</button></td>
+        <td><button onclick="addValue('Premium Beanies - 50%', 10)">10.00</button></td>
+    </tr>
+    <tr>
+        <td>Light Beanies</td>
+        <td><button onclick="addValue('Light Beanies - Original', 15)">15</button></td>
+        <td><button onclick="addValue('Light Beanies - 25%', 11.25)">11.25</button></td>
+        <td><button onclick="addValue('Light Beanies - 50%', 7.5)">7.50</button></td>
+    </tr>
+    <tr>
+        <td>Tumblers</td>
+        <td><button onclick="addValue('Tumblers - Original', 20)">20</button></td>
+        <td><button onclick="addValue('Tumblers - 25%', 15)">15.00</button></td>
+        <td><button onclick="addValue('Tumblers - 50%', 10)">10.00</button></td>
+    </tr>
+    <tr>
+        <td>Mugs</td>
+        <td><button onclick="addValue('Mugs - Original', 15)">15</button></td>
+        <td><button onclick="addValue('Mugs - 25%', 11.25)">11.25</button></td>
+        <td><button onclick="addValue('Mugs - 50%', 7.5)">7.50</button></td>
+    </tr>
+    <tr>
+        <td>Boxes</td>
+        <td><button onclick="addValue('Boxes - Original', 10)">10</button></td>
+        <td><button onclick="addValue('Boxes - 25%', 7.5)">7.50</button></td>
+        <td><button onclick="addValue('Boxes - 50%', 5)">5.00</button></td>
+    </tr>
+</table>
 
-  <div id="total">Total: $0.00</div>
+<div id="summary">
+    <h3>Running Total: $<span id="total">0.00</span></h3>
+    <button onclick="clearAll()">Clear All</button>
 
-  <script>
+    <h3>Selected Options:</h3>
+    <ul id="selectedList"></ul>
+</div>
+
+<script>
     let total = 0;
-    function clearTotal() {
-      total = 0;
-      document.getElementById('total').textContent = `Total: $0.00`;
+
+    function addValue(label, amount) {
+        total += amount;
+        document.getElementById("total").innerText = total.toFixed(2);
+
+        const li = document.createElement("li");
+        li.textContent = `${label}: $${amount.toFixed(2)}`;
+        document.getElementById("selectedList").appendChild(li);
     }
 
-    function add(amount) {
-      total += amount;
-      document.getElementById('total').textContent = `Total: $${total.toFixed(2)}`;
+    function clearAll() {
+        total = 0;
+        document.getElementById("total").innerText = "0.00";
+        document.getElementById("selectedList").innerHTML = "";
     }
-  </script>
+</script>
+
 </body>
 </html>
