@@ -4,89 +4,65 @@
 <meta charset="UTF-8">
 <title>Store Calculator</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        padding: 0;
-        background-color: #fff;
-    }
+    body { font-family: Arial, sans-serif; margin: 15px; }
+    h2 { margin-bottom: 15px; text-align: center; }
 
-    h2 {
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
+    /* Grid: 4 columns, always 4 per row (3x4 layout) */
     .grid {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-bottom: 20px;
     }
 
-    /* Mobile-first: one item per row */
     .item-card {
-        flex: 1 1 100%;
+        flex: 1 1 calc(25% - 10px); /* 4 per row */
         border: 1px solid #aaa;
-        padding: 15px;
+        padding: 20px;
         text-align: center;
         border-radius: 8px;
         background-color: #f9f9f9;
     }
 
+    /* Big buttons for mobile touch */
     .item-card button {
-        padding: 12px 18px;
-        font-size: 16px;
+        padding: 20px 0;
+        font-size: 18px;
         cursor: pointer;
-        margin-top: 10px;
         width: 100%;
-        max-width: 150px;
+        border-radius: 6px;
     }
 
-    /* Tablet: two items per row */
-    @media (min-width: 600px) {
-        .item-card {
-            flex: 1 1 calc(50% - 10px);
-        }
-    }
-
-    /* Desktop: four items per row */
-    @media (min-width: 992px) {
-        .item-card {
-            flex: 1 1 calc(25% - 10px);
-        }
-    }
-
-    #summary, #change-calculator {
-        margin-top: 30px;
-        text-align: center;
-    }
-
-    #selectedList {
-        list-style: none;
-        padding: 0;
-        margin-top: 10px;
-        max-height: 200px;
-        overflow-y: auto;
-    }
-
-    input[type="number"] {
+    /* Card Fee button */
+    #card-fee-btn {
+        padding: 20px 0;
+        font-size: 18px;
         width: 100%;
-        max-width: 150px;
-        padding: 8px;
-        margin-top: 5px;
-        font-size: 16px;
-    }
-
-    button.calc-btn, #summary button {
-        padding: 8px 12px;
-        margin-top: 10px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .center-row {
-        text-align: center;
         margin-bottom: 20px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    /* Summary section */
+    #summary, #change-calculator { margin-top: 20px; }
+
+    /* Change calculator input & button */
+    input[type="number"] {
+        width: 120px;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    button.calc-btn {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    /* Slightly bigger cards and buttons on tablets/desktops */
+    @media (min-width: 600px) {
+        .item-card { padding: 25px; }
+        .item-card button { font-size: 20px; padding: 25px 0; }
+        #card-fee-btn { font-size: 20px; padding: 25px 0; }
     }
 </style>
 </head>
@@ -96,64 +72,30 @@
 
 <div class="grid">
     <!-- Row 1 -->
-    <div class="item-card">
-        <strong>Hats</strong><br>
-        <button onclick="addValue('Hats', 20)">$20</button>
-    </div>
-    <div class="item-card">
-        <strong>Tank Tops</strong><br>
-        <button onclick="addValue('Tank Tops', 20)">$20</button>
-    </div>
-    <div class="item-card">
-        <strong>Shirts</strong><br>
-        <button onclick="addValue('Shirts', 20)">$20</button>
-    </div>
-    <div class="item-card">
-        <strong>Tumblers</strong><br>
-        <button onclick="addValue('Tumblers', 20)">$20</button>
-    </div>
+    <div class="item-card"><strong>Hats</strong><br><button onclick="addValue('Hats', 20)">$20</button></div>
+    <div class="item-card"><strong>Tank Tops</strong><br><button onclick="addValue('Tank Tops', 20)">$20</button></div>
+    <div class="item-card"><strong>Shirts</strong><br><button onclick="addValue('Shirts', 20)">$20</button></div>
+    <div class="item-card"><strong>Tumblers</strong><br><button onclick="addValue('Tumblers', 20)">$20</button></div>
 
     <!-- Row 2 -->
-    <div class="item-card">
-        <strong>Mugs</strong><br>
-        <button onclick="addValue('Mugs', 15)">$15</button>
-    </div>
-    <div class="item-card">
-        <strong>Coloring Books</strong><br>
-        <button onclick="addValue('Coloring Books', 10)">$10</button>
-    </div>
-    <div class="item-card">
-        <strong>Totes</strong><br>
-        <button onclick="addValue('Totes', 10)">$10</button>
-    </div>
-    <div class="item-card">
-        <strong>Aprons</strong><br>
-        <button onclick="addValue('Aprons', 10)">$10</button>
-    </div>
+    <div class="item-card"><strong>Mugs</strong><br><button onclick="addValue('Mugs', 15)">$15</button></div>
+    <div class="item-card"><strong>Coloring Books</strong><br><button onclick="addValue('Coloring Books', 10)">$10</button></div>
+    <div class="item-card"><strong>Totes</strong><br><button onclick="addValue('Totes', 10)">$10</button></div>
+    <div class="item-card"><strong>Aprons</strong><br><button onclick="addValue('Aprons', 10)">$10</button></div>
 
     <!-- Row 3 -->
-    <div class="item-card">
-        <strong>Dobbers</strong><br>
-        <button onclick="addValue('Dobbers', 5)">$5</button>
-    </div>
-    <div class="item-card">
-        <strong>Coasters</strong><br>
+    <div class="item-card"><strong>Dobbers</strong><br><button onclick="addValue('Dobbers', 5)">$5</button></div>
+    <div class="item-card"><strong>Coasters</strong><br>
         <button onclick="addValue('Coaster (1)', 5)">$5</button>
         <button onclick="addValue('Coaster (4 pack)', 15)">$15</button>
     </div>
-    <div class="item-card">
-        <strong>Stickers</strong><br>
-        <button onclick="addValue('Stickers', 1)">$1</button>
-    </div>
-    <div class="item-card">
-        <strong>Buttons</strong><br>
-        <button onclick="addValue('Buttons', 1)">$1</button>
-    </div>
+    <div class="item-card"><strong>Stickers</strong><br><button onclick="addValue('Stickers', 1)">$1</button></div>
+    <div class="item-card"><strong>Buttons</strong><br><button onclick="addValue('Buttons', 1)">$1</button></div>
 </div>
 
 <!-- Card Fee -->
-<div class="center-row">
-    <button onclick="addValue('Card Fee', 2)">Card Fee (+$2)</button>
+<div style="text-align:center; margin-bottom: 20px;">
+    <button id="card-fee-btn" onclick="addValue('Card Fee', 2)">Card Fee (+$2)</button>
 </div>
 
 <!-- Summary -->
@@ -169,7 +111,6 @@
     <h3>Change Calculator</h3>
     <label for="cash">Cash Received: $</label>
     <input type="number" id="cash" min="0" step="0.01">
-    <br>
     <button class="calc-btn" onclick="calculateChange()">Calculate Change</button>
     <p id="change-output"></p>
 </div>
@@ -184,10 +125,6 @@ function addValue(label, amount) {
     const li = document.createElement("li");
     li.textContent = `${label}: $${amount.toFixed(2)}`;
     document.getElementById("selectedList").appendChild(li);
-
-    // Update change automatically if cash is already entered
-    const cashInput = parseFloat(document.getElementById("cash").value);
-    if (!isNaN(cashInput)) calculateChange();
 }
 
 function clearAll() {
@@ -201,7 +138,7 @@ function clearAll() {
 function calculateChange() {
     const cash = parseFloat(document.getElementById("cash").value);
     if (isNaN(cash)) {
-        document.getElementById("change-output").innerText = '';
+        alert("Please enter a valid amount of cash received.");
         return;
     }
 
