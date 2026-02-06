@@ -2,22 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Discount Calculator</title>
+<title>Store Calculator</title>
 <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
-    table { border-collapse: collapse; width: 450px; margin-bottom: 15px; }
+    table { border-collapse: collapse; width: 500px; margin-bottom: 15px; }
     th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
-
-    /* Column colors */
-    td:nth-child(2), th:nth-child(2) { background-color: #ffd6d6; }  /* Original */
-    td:nth-child(3), th:nth-child(3) { background-color: #d6f5f2; }  /* 25% */
-    td:nth-child(4), th:nth-child(4) { background-color: #eeeeee; }  /* 50% */
-
     button { padding: 5px 10px; cursor: pointer; }
 
     /* Center the card fee button */
     .center-row {
-        text-align: ;
+        text-align: center;
         padding-top: 10px;
     }
 
@@ -26,42 +20,64 @@
 </head>
 <body>
 
-<h2>Discount Calculator</h2>
+<h2>Store Calculator</h2>
 
 <table>
     <tr>
         <th>Item</th>
-        <th>Original Price</th>
-        <th>25%</th>
-        <th>50%</th>
+        <th>Price</th>
     </tr>
 
+    <tr>
+        <td>Hats</td>
+        <td><button onclick="addValue('Hats', 20)">20</button></td>
+    </tr>
+    <tr>
+        <td>Tank Tops</td>
+        <td><button onclick="addValue('Tank Tops', 20)">20</button></td>
+    </tr>
     <tr>
         <td>Shirts</td>
-        <td><button onclick="addValue('Shirts - Original', 15)">15</button></td>
-        <td><button onclick="addValue('Shirts - 25%', 11.25)">11.25</button></td>
-        <td><button onclick="addValue('Shirts - 50%', 7.50)">7.50</button></td>
+        <td><button onclick="addValue('Shirts', 20)">20</button></td>
     </tr>
-
-    <tr>
-        <td>Beanies</td>
-        <td><button onclick="addValue('Beanies - Original', 10)">10</button></td>
-        <td><button onclick="addValue('Beanies - 25%', 7.50)">7.50</button></td>
-        <td><button onclick="addValue('Beanies - 50%', 5.00)">5.00</button></td>
-    </tr>
-
     <tr>
         <td>Tumblers</td>
-        <td><button onclick="addValue('Tumblers - Original', 15)">15</button></td>
-        <td><button onclick="addValue('Tumblers - 25%', 11.25)">11.25</button></td>
-        <td><button onclick="addValue('Tumblers - 50%', 7.50)">7.50</button></td>
+        <td><button onclick="addValue('Tumblers', 20)">20</button></td>
     </tr>
-
     <tr>
-        <td>Boxes</td>
-        <td><button onclick="addValue('Boxes - Original', 10)">10</button></td>
-        <td><button onclick="addValue('Boxes - 25%', 7.50)">7.50</button></td>
-        <td><button onclick="addValue('Boxes - 50%', 5.00)">5.00</button></td>
+        <td>Mugs</td>
+        <td><button onclick="addValue('Mugs', 15)">15</button></td>
+    </tr>
+    <tr>
+        <td>Coloring Books</td>
+        <td><button onclick="addValue('Coloring Books', 10)">10</button></td>
+    </tr>
+    <tr>
+        <td>Totes</td>
+        <td><button onclick="addValue('Totes', 10)">10</button></td>
+    </tr>
+    <tr>
+        <td>Aprons</td>
+        <td><button onclick="addValue('Aprons', 10)">10</button></td>
+    </tr>
+    <tr>
+        <td>Dobbers</td>
+        <td><button onclick="addValue('Dobbers', 5)">5</button></td>
+    </tr>
+    <tr>
+        <td>Coasters</td>
+        <td>
+            <button onclick="addValue('Coaster (1)', 5)">5</button>
+            <button onclick="addValue('Coaster (4 pack)', 15)">15</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Stickers</td>
+        <td><button onclick="addValue('Stickers', 1)">1</button></td>
+    </tr>
+    <tr>
+        <td>Buttons</td>
+        <td><button onclick="addValue('Buttons', 1)">1</button></td>
     </tr>
 </table>
 
@@ -74,7 +90,7 @@
     <h3>Running Total: $<span id="total">0.00</span></h3>
     <button onclick="clearAll()">Clear All</button>
 
-    <h3>Selected Options:</h3>
+    <h3>Selected Items:</h3>
     <ul id="selectedList"></ul>
 </div>
 
