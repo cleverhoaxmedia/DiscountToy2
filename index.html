@@ -4,21 +4,90 @@
 <meta charset="UTF-8">
 <title>Store Calculator</title>
 <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    h2 { margin-bottom: 15px; }
-    .grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #fff;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    /* Mobile-first: one item per row */
     .item-card {
-        flex: 1 1 calc(25% - 10px); /* 4 items per row */
+        flex: 1 1 100%;
         border: 1px solid #aaa;
         padding: 15px;
         text-align: center;
         border-radius: 8px;
         background-color: #f9f9f9;
     }
-    .item-card button { padding: 10px 15px; cursor: pointer; margin-top: 10px; }
-    #summary, #change-calculator { margin-top: 30px; }
-    input[type="number"] { width: 80px; padding: 5px; }
-    button.calc-btn { padding: 5px 10px; margin-left: 5px; }
+
+    .item-card button {
+        padding: 12px 18px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        max-width: 150px;
+    }
+
+    /* Tablet: two items per row */
+    @media (min-width: 600px) {
+        .item-card {
+            flex: 1 1 calc(50% - 10px);
+        }
+    }
+
+    /* Desktop: four items per row */
+    @media (min-width: 992px) {
+        .item-card {
+            flex: 1 1 calc(25% - 10px);
+        }
+    }
+
+    #summary, #change-calculator {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    #selectedList {
+        list-style: none;
+        padding: 0;
+        margin-top: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        max-width: 150px;
+        padding: 8px;
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+    button.calc-btn, #summary button {
+        padding: 8px 12px;
+        margin-top: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .center-row {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 </style>
 </head>
 <body>
@@ -83,7 +152,7 @@
 </div>
 
 <!-- Card Fee -->
-<div style="text-align:center; margin-bottom: 20px;">
+<div class="center-row">
     <button onclick="addValue('Card Fee', 2)">Card Fee (+$2)</button>
 </div>
 
@@ -100,6 +169,7 @@
     <h3>Change Calculator</h3>
     <label for="cash">Cash Received: $</label>
     <input type="number" id="cash" min="0" step="0.01">
+    <br>
     <button class="calc-btn" onclick="calculateChange()">Calculate Change</button>
     <p id="change-output"></p>
 </div>
@@ -114,6 +184,10 @@ function addValue(label, amount) {
     const li = document.createElement("li");
     li.textContent = `${label}: $${amount.toFixed(2)}`;
     document.getElementById("selectedList").appendChild(li);
+
+    // Update change automatically if cash is already entered
+    const cashInput = parseFloat(document.getElementById("cash").value);
+    if (!isNaN(cashInput)) calculateChange();
 }
 
 function clearAll() {
@@ -127,7 +201,7 @@ function clearAll() {
 function calculateChange() {
     const cash = parseFloat(document.getElementById("cash").value);
     if (isNaN(cash)) {
-        alert("Please enter a valid amount of cash received.");
+        document.getElementById("change-output").innerText = '';
         return;
     }
 
