@@ -5,112 +5,139 @@
 <title>Store Calculator</title>
 <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
-    table { border-collapse: collapse; width: 500px; margin-bottom: 15px; }
-    th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
-    button { padding: 5px 10px; cursor: pointer; }
-
-    /* Center the card fee button */
-    .center-row {
+    h2 { margin-bottom: 15px; }
+    .grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .item-card {
+        flex: 1 1 calc(25% - 10px); /* 4 items per row */
+        border: 1px solid #aaa;
+        padding: 15px;
         text-align: center;
-        padding-top: 10px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
     }
-
-    #summary { margin-top: 20px; }
+    .item-card button { padding: 10px 15px; cursor: pointer; margin-top: 10px; }
+    #summary, #change-calculator { margin-top: 30px; }
+    input[type="number"] { width: 80px; padding: 5px; }
+    button.calc-btn { padding: 5px 10px; margin-left: 5px; }
 </style>
 </head>
 <body>
 
 <h2>Store Calculator</h2>
 
-<table>
-    <tr>
-        <th>Item</th>
-        <th>Price</th>
-    </tr>
+<div class="grid">
+    <!-- Row 1 -->
+    <div class="item-card">
+        <strong>Hats</strong><br>
+        <button onclick="addValue('Hats', 20)">$20</button>
+    </div>
+    <div class="item-card">
+        <strong>Tank Tops</strong><br>
+        <button onclick="addValue('Tank Tops', 20)">$20</button>
+    </div>
+    <div class="item-card">
+        <strong>Shirts</strong><br>
+        <button onclick="addValue('Shirts', 20)">$20</button>
+    </div>
+    <div class="item-card">
+        <strong>Tumblers</strong><br>
+        <button onclick="addValue('Tumblers', 20)">$20</button>
+    </div>
 
-    <tr>
-        <td>Hats</td>
-        <td><button onclick="addValue('Hats', 20)">20</button></td>
-    </tr>
-    <tr>
-        <td>Tank Tops</td>
-        <td><button onclick="addValue('Tank Tops', 20)">20</button></td>
-    </tr>
-    <tr>
-        <td>Shirts</td>
-        <td><button onclick="addValue('Shirts', 20)">20</button></td>
-    </tr>
-    <tr>
-        <td>Tumblers</td>
-        <td><button onclick="addValue('Tumblers', 20)">20</button></td>
-    </tr>
-    <tr>
-        <td>Mugs</td>
-        <td><button onclick="addValue('Mugs', 15)">15</button></td>
-    </tr>
-    <tr>
-        <td>Coloring Books</td>
-        <td><button onclick="addValue('Coloring Books', 10)">10</button></td>
-    </tr>
-    <tr>
-        <td>Totes</td>
-        <td><button onclick="addValue('Totes', 10)">10</button></td>
-    </tr>
-    <tr>
-        <td>Aprons</td>
-        <td><button onclick="addValue('Aprons', 10)">10</button></td>
-    </tr>
-    <tr>
-        <td>Dobbers</td>
-        <td><button onclick="addValue('Dobbers', 5)">5</button></td>
-    </tr>
-    <tr>
-        <td>Coasters</td>
-        <td>
-            <button onclick="addValue('Coaster (1)', 5)">5</button>
-            <button onclick="addValue('Coaster (4 pack)', 15)">15</button>
-        </td>
-    </tr>
-    <tr>
-        <td>Stickers</td>
-        <td><button onclick="addValue('Stickers', 1)">1</button></td>
-    </tr>
-    <tr>
-        <td>Buttons</td>
-        <td><button onclick="addValue('Buttons', 1)">1</button></td>
-    </tr>
-</table>
+    <!-- Row 2 -->
+    <div class="item-card">
+        <strong>Mugs</strong><br>
+        <button onclick="addValue('Mugs', 15)">$15</button>
+    </div>
+    <div class="item-card">
+        <strong>Coloring Books</strong><br>
+        <button onclick="addValue('Coloring Books', 10)">$10</button>
+    </div>
+    <div class="item-card">
+        <strong>Totes</strong><br>
+        <button onclick="addValue('Totes', 10)">$10</button>
+    </div>
+    <div class="item-card">
+        <strong>Aprons</strong><br>
+        <button onclick="addValue('Aprons', 10)">$10</button>
+    </div>
 
-<!-- Card Fee button centered below the table -->
-<div class="center-row">
+    <!-- Row 3 -->
+    <div class="item-card">
+        <strong>Dobbers</strong><br>
+        <button onclick="addValue('Dobbers', 5)">$5</button>
+    </div>
+    <div class="item-card">
+        <strong>Coasters</strong><br>
+        <button onclick="addValue('Coaster (1)', 5)">$5</button>
+        <button onclick="addValue('Coaster (4 pack)', 15)">$15</button>
+    </div>
+    <div class="item-card">
+        <strong>Stickers</strong><br>
+        <button onclick="addValue('Stickers', 1)">$1</button>
+    </div>
+    <div class="item-card">
+        <strong>Buttons</strong><br>
+        <button onclick="addValue('Buttons', 1)">$1</button>
+    </div>
+</div>
+
+<!-- Card Fee -->
+<div style="text-align:center; margin-bottom: 20px;">
     <button onclick="addValue('Card Fee', 2)">Card Fee (+$2)</button>
 </div>
 
+<!-- Summary -->
 <div id="summary">
     <h3>Running Total: $<span id="total">0.00</span></h3>
     <button onclick="clearAll()">Clear All</button>
-
     <h3>Selected Items:</h3>
     <ul id="selectedList"></ul>
 </div>
 
+<!-- Simple Change Calculator -->
+<div id="change-calculator">
+    <h3>Change Calculator</h3>
+    <label for="cash">Cash Received: $</label>
+    <input type="number" id="cash" min="0" step="0.01">
+    <button class="calc-btn" onclick="calculateChange()">Calculate Change</button>
+    <p id="change-output"></p>
+</div>
+
 <script>
-    let total = 0;
+let total = 0;
 
-    function addValue(label, amount) {
-        total += amount;
-        document.getElementById("total").innerText = total.toFixed(2);
+function addValue(label, amount) {
+    total += amount;
+    document.getElementById("total").innerText = total.toFixed(2);
 
-        const li = document.createElement("li");
-        li.textContent = `${label}: $${amount.toFixed(2)}`;
-        document.getElementById("selectedList").appendChild(li);
+    const li = document.createElement("li");
+    li.textContent = `${label}: $${amount.toFixed(2)}`;
+    document.getElementById("selectedList").appendChild(li);
+}
+
+function clearAll() {
+    total = 0;
+    document.getElementById("total").innerText = "0.00";
+    document.getElementById("selectedList").innerHTML = "";
+    document.getElementById("cash").value = '';
+    document.getElementById("change-output").innerText = '';
+}
+
+function calculateChange() {
+    const cash = parseFloat(document.getElementById("cash").value);
+    if (isNaN(cash)) {
+        alert("Please enter a valid amount of cash received.");
+        return;
     }
 
-    function clearAll() {
-        total = 0;
-        document.getElementById("total").innerText = "0.00";
-        document.getElementById("selectedList").innerHTML = "";
+    const change = cash - total;
+    if (change < 0) {
+        document.getElementById("change-output").innerText = `Not enough cash received. Still owe $${Math.abs(change).toFixed(2)}`;
+    } else {
+        document.getElementById("change-output").innerText = `Change: $${change.toFixed(2)}`;
     }
+}
 </script>
 
 </body>
