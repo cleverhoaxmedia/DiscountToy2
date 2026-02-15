@@ -62,14 +62,6 @@
 
 <div class="grid">
 
-    <div class="item-card"><strong>Hats</strong><br>
-        <button class="price-btn" data-original="20" data-dark="20" onclick="addValue('Hats', this)">$20</button>
-    </div>
-
-    <div class="item-card"><strong>Tank Tops</strong><br>
-        <button class="price-btn" data-original="20" data-dark="20" onclick="addValue('Tank Tops', this)">$20</button>
-    </div>
-
     <div class="item-card"><strong>Shirts</strong><br>
         <button class="price-btn" data-original="25" data-dark="20" onclick="addValue('Shirts', this)">$25</button>
     </div>
@@ -80,10 +72,6 @@
 
     <div class="item-card"><strong>Mugs</strong><br>
         <button class="price-btn" data-original="15" data-dark="10" onclick="addValue('Mugs', this)">$15</button>
-    </div>
-
-    <div class="item-card"><strong>Coloring Books</strong><br>
-        <button class="price-btn" data-original="10" data-dark="10" onclick="addValue('Coloring Books', this)">$10</button>
     </div>
 
     <div class="item-card"><strong>Totes</strong><br>
@@ -106,6 +94,85 @@
     <div class="item-card"><strong>Stickers</strong><br>
         <button class="price-btn" data-original="1" data-dark="1" onclick="addValue('Stickers', this)">$1</button>
     </div>
+
+    <div class="item-card"><strong>Buttons</strong><br>
+        <button class="price-btn" data-original="1" data-dark="1" onclick="addValue('Buttons', this)">$1</button>
+    </div>
+
+    <div class="item-card"><strong>Beanies</strong><br>
+        <button class="price-btn" data-original="5" data-dark="5" onclick="addValue('Beanies', this)">$5</button>
+    </div>
+
+</div>
+
+<div style="text-align:center; margin-bottom: 20px;">
+    <button id="card-fee-btn" onclick="addValue('Card Fee', null, 2)">Card Fee (+$2)</button>
+</div>
+
+<div id="summary">
+    <h3>Subtotal: $<span id="subtotal">0.00</span></h3>
+    <h3>Tax (8.25%): $<span id="tax">0.00</span></h3>
+    <h3>Total: $<span id="total">0.00</span></h3>
+    <button onclick="clearAll()">Clear All</button>
+    <h3>Selected Items:</h3>
+    <ul id="selectedList"></ul>
+</div>
+
+<script>
+let subtotal = 0;
+let darkMode = false;
+const taxRate = 0.0825;
+
+function updateTotals() {
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax;
+    document.getElementById("subtotal").innerText = subtotal.toFixed(2);
+    document.getElementById("tax").innerText = tax.toFixed(2);
+    document.getElementById("total").innerText = total.toFixed(2);
+}
+
+function addValue(label, button, overrideAmount = null) {
+    let amount;
+
+    if (overrideAmount !== null) {
+        amount = overrideAmount;
+    } else {
+        amount = darkMode
+            ? parseFloat(button.dataset.dark)
+            : parseFloat(button.dataset.original);
+    }
+
+    subtotal += amount;
+    updateTotals();
+
+    const li = document.createElement("li");
+    li.textContent = `${label}: $${amount.toFixed(2)}`;
+    document.getElementById("selectedList").appendChild(li);
+}
+
+function clearAll() {
+    subtotal = 0;
+    updateTotals();
+    document.getElementById("selectedList").innerHTML = "";
+}
+
+function toggleDarkMode() {
+    darkMode = !darkMode;
+    document.body.classList.toggle("dark");
+
+    const buttons = document.querySelectorAll(".price-btn");
+
+    buttons.forEach(btn => {
+        const price = darkMode
+            ? btn.dataset.dark
+            : btn.dataset.original;
+        btn.innerText = "$" + price;
+    });
+}
+</script>
+
+</body>
+</html>
 
     <div class="item-card"><strong>Buttons</strong><br>
         <button class="price-btn" data-original="1" data-dark="1" onclick="addValue('Buttons', this)">$1</button>
