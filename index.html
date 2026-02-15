@@ -3,46 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discount Toy 2</title>
-    <style>
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-    </style>
+    <title>Discount Toy Store</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="grid">
-        <!-- Other grid items here -->
-        <div class="card">
-            <h2>Item 1</h2>
-            <p>Price: $10</p>
+    <header>
+        <h1>Discount Toy Store</h1>
+    </header>
+    <main>
+        <div class="grid-container">
+            <div class="grid-item">
+                <h2>Shirts</h2>
+                <p>$19.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Tumblers</h2>
+                <p>$14.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Mugs</h2>
+                <p>$9.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Totes</h2>
+                <p>$12.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Aprons</h2>
+                <p>$24.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Daubbers</h2>
+                <p>$5.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Coasters</h2>
+                <p>$7.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Stickers</h2>
+                <p>$2.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Buttons</h2>
+                <p>$3.99</p>
+            </div>
+            <div class="grid-item">
+                <h2>Beanies</h2>
+                <p>$15.99</p>
+            </div>
+            <div class="grid-item">
+                <button class="card-fee">Card Fee</button>
+            </div>
         </div>
-        <div class="card">
-            <h2>Item 2</h2>
-            <p>Price: $12</p>
-        </div>
-        <div class="card">
-            <h2>Item 3</h2>
-            <p>Price: $15</p>
-        </div>
-        <div class="card">
-            <h2>Item 4</h2>
-            <p>Price: $20</p>
-        </div>
-        <div class="card">
-            <h2>Item 5</h2>
-            <p>Price: $25</p>
-        </div>
-        <div class="card">
-            <h2>Item 6</h2>
-            <p>Price: $30</p>
-        </div>
-        <div class="card">
-            <h2>Card Fee</h2>
-            <button>Card Fee Button</button>
-        </div>
-    </div>
+    </main>
+    <script>
+        // Dark mode functionality
+        const toggleDarkMode = () => {
+            document.body.classList.toggle('dark-mode');
+        };
+    </script>
 </body>
 </html>
