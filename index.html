@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,15 +33,6 @@
         width: 100%;
         border-radius: 6px;
         margin-top: 5px;
-    }
-
-    #card-fee-btn {
-        padding: 20px 0;
-        font-size: 18px;
-        width: 100%;
-        margin-bottom: 20px;
-        border-radius: 6px;
-        cursor: pointer;
     }
 
     .toggle-container {
@@ -104,10 +94,10 @@
         <button class="price-btn" data-original="5" data-dark="5" onclick="addValue('Beanies', this)">$5</button>
     </div>
 
-</div>
+    <div class="item-card"><strong>Card Fee</strong><br>
+        <button onclick="addValue('Card Fee', null, 2)">$2</button>
+    </div>
 
-<div style="text-align:center; margin-bottom: 20px;">
-    <button id="card-fee-btn" onclick="addValue('Card Fee', null, 2)">Card Fee (+$2)</button>
 </div>
 
 <div id="summary">
