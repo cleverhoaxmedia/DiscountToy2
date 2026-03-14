@@ -244,6 +244,51 @@
   }
   .total-row.grand .value { color: var(--accent); font-size: 1.4rem; }
 
+  /* Card fee toggle */
+  .card-fee-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card-bg);
+    border-radius: 4px;
+    padding: 13px 16px;
+    box-shadow: 0 2px 8px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.8);
+    border-bottom: 3px solid var(--gold);
+  }
+  .card-fee-info { display: flex; flex-direction: column; gap: 3px; }
+  .card-fee-info .item-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--dark); }
+  .card-fee-info .item-price { font-size: 0.82rem; color: var(--brown); font-weight: 700; letter-spacing: 0.04em; }
+
+  .toggle-switch {
+    position: relative;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 26px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .toggle-switch input:checked + .toggle-slider { background: var(--gold); }
+  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
   /* Reset */
   .reset-btn {
     background: transparent;
@@ -297,6 +342,17 @@
     <!-- Cards injected by JS -->
   </div>
 
+  <div class="card-fee-row">
+    <div class="card-fee-info">
+      <div class="item-name">💳 Card Fee</div>
+      <div class="item-price">$2.00 flat fee</div>
+    </div>
+    <label class="toggle-switch">
+      <input type="checkbox" id="cardFeeToggle" onchange="recalculate()">
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
+
   <div class="discount-note hidden" id="discountNote">
     🎉 Dauber discount applied! −$5.00 off eligible items.
   </div>
@@ -311,6 +367,10 @@
       <div class="total-row discount" id="discountRow" style="display:none">
         <span class="label">Dauber Discount</span>
         <span class="value" id="discountDisplay">−$0.00</span>
+      </div>
+      <div class="total-row" id="cardFeeRow" style="display:none">
+        <span class="label">💳 Card Fee</span>
+        <span class="value" id="cardFeeDisplay">$2.00</span>
       </div>
       <div class="total-row tax">
         <span class="label">Tax (8.25%)</span>
@@ -388,44 +448,46 @@ function updateSubtotal(id) {
   el.textContent = qty > 0 ? '$' + (item.price * qty).toFixed(2) : '';
 }
 
-function recalculate() {
-  let subtotal = 0;
-  items.forEach(item => {
-    subtotal += item.price * quantities[item.id];
-  });
+  const CARD_FEE = 2.00;
 
-  const hasDauber = quantities['dauber'] > 0;
+  function recalculate() {
+    let subtotal = 0;
+    items.forEach(item => {
+      subtotal += item.price * quantities[item.id];
+    });
 
-  // Eligible subtotal = subtotal minus daubers and single coasters
-  let eligibleSubtotal = 0;
-  items.forEach(item => {
-    if (item.eligible) eligibleSubtotal += item.price * quantities[item.id];
-  });
+    const hasDauber = quantities['dauber'] > 0;
+    let eligibleSubtotal = 0;
+    items.forEach(item => {
+      if (item.eligible) eligibleSubtotal += item.price * quantities[item.id];
+    });
 
-  let discount = 0;
-  if (hasDauber && eligibleSubtotal > 0) {
-    discount = DAUBER_DISCOUNT;
+    let discount = 0;
+    if (hasDauber && eligibleSubtotal > 0) discount = DAUBER_DISCOUNT;
+
+    const cardFee = document.getElementById('cardFeeToggle').checked ? CARD_FEE : 0;
+    const taxable = Math.max(0, subtotal - discount);
+    const tax = taxable * TAX_RATE;
+    const grand = taxable + tax + cardFee;
+
+    document.getElementById('subtotalDisplay').textContent = '$' + subtotal.toFixed(2);
+    document.getElementById('taxDisplay').textContent = '$' + tax.toFixed(2);
+    document.getElementById('grandDisplay').textContent = '$' + grand.toFixed(2);
+
+    const cardFeeRow = document.getElementById('cardFeeRow');
+    cardFeeRow.style.display = cardFee > 0 ? 'flex' : 'none';
+
+    const discountRow = document.getElementById('discountRow');
+    const discountNote = document.getElementById('discountNote');
+    if (discount > 0) {
+      discountRow.style.display = 'flex';
+      document.getElementById('discountDisplay').textContent = '−$' + discount.toFixed(2);
+      discountNote.classList.remove('hidden');
+    } else {
+      discountRow.style.display = 'none';
+      discountNote.classList.add('hidden');
+    }
   }
-
-  const taxable = subtotal - discount;
-  const tax = Math.max(0, taxable) * TAX_RATE;
-  const grand = Math.max(0, taxable) + tax;
-
-  document.getElementById('subtotalDisplay').textContent = '$' + subtotal.toFixed(2);
-  document.getElementById('taxDisplay').textContent = '$' + tax.toFixed(2);
-  document.getElementById('grandDisplay').textContent = '$' + grand.toFixed(2);
-
-  const discountRow = document.getElementById('discountRow');
-  const discountNote = document.getElementById('discountNote');
-  if (discount > 0) {
-    discountRow.style.display = 'flex';
-    document.getElementById('discountDisplay').textContent = '−$' + discount.toFixed(2);
-    discountNote.classList.remove('hidden');
-  } else {
-    discountRow.style.display = 'none';
-    discountNote.classList.add('hidden');
-  }
-}
 
 function resetAll() {
   items.forEach(i => {
@@ -433,6 +495,7 @@ function resetAll() {
     document.getElementById('qty-' + i.id).textContent = '0';
     document.getElementById('sub-' + i.id).textContent = '';
   });
+  document.getElementById('cardFeeToggle').checked = false;
   recalculate();
 }
 
