@@ -1,265 +1,443 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Store Calculator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merch Stand Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EFE0;
+    --dark: #2C2416;
+    --brown: #6B4C2A;
+    --accent: #D4522A;
+    --gold: #C89A3C;
+    --green: #3A6B4A;
+    --light-brown: #A87A4B;
+    --card-bg: #FDF8EE;
+    --shadow: rgba(44,36,22,0.15);
+  }
 
-  <style>
-    /* Use rems so one change scales the whole UI */
-    html { font-size: 18px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 15px;
-      transition: 0.3s;
-      line-height: 1.35;
-    }
+  body {
+    background-color: var(--dark);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+    min-height: 100vh;
+    font-family: 'Lato', sans-serif;
+    color: var(--dark);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 16px 60px;
+  }
 
-    body.dark { background: #111; color: #fff; }
-    body.dark .item-card { background: #222; border-color: #555; }
+  .wrapper {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 
-    h2 {
-      margin: 0 0 15px;
-      text-align: center;
-      font-size: 1.6rem;
-    }
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 28px 24px 22px;
+    background: var(--accent);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 8px,
+      rgba(0,0,0,0.06) 8px,
+      rgba(0,0,0,0.06) 9px
+    );
+  }
+  .header-inner { position: relative; }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    text-shadow: 2px 3px 0 rgba(0,0,0,0.25);
+    line-height: 1.1;
+  }
+  .header p {
+    color: rgba(245,239,224,0.85);
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    font-weight: 700;
+  }
 
-    .toggle-container {
-      text-align: center;
-      margin-bottom: 15px;
-      font-size: 1.05rem;
-    }
+  /* Items grid */
+  .section-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(245,239,224,0.2);
+  }
 
-    .toggle-container input {
-      transform: scale(1.15);
-      margin-right: 8px;
-    }
+  .items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
 
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: stretch;
-    }
+  .item-card {
+    background: var(--card-bg);
+    border-radius: 4px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 8px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.8);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border-bottom: 3px solid var(--light-brown);
+  }
+  .item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+  .item-card.dauber-card {
+    border-bottom-color: var(--green);
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: #EEF5F0;
+  }
+  .item-info { flex: 1; }
+  .item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+  }
+  .item-price {
+    font-size: 0.82rem;
+    color: var(--brown);
+    font-weight: 700;
+    margin-top: 3px;
+    letter-spacing: 0.04em;
+  }
+  .dauber-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--green);
+    background: rgba(58,107,74,0.1);
+    border: 1px solid rgba(58,107,74,0.3);
+    border-radius: 2px;
+    padding: 2px 7px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: inline-block;
+  }
 
-    .item-card {
-      flex: 1 1 calc(33.333% - 10px);
-      border: 1px solid #aaa;
-      padding: 18px;
-      text-align: center;
-      border-radius: 12px;
-      background-color: #f9f9f9;
-      transition: 0.3s;
-      box-sizing: border-box;
-    }
+  /* Qty controls */
+  .qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qty-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 3px;
+    border: 2px solid var(--brown);
+    background: white;
+    color: var(--brown);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.1s, color 0.1s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .qty-btn:hover { background: var(--brown); color: white; }
+  .dauber-card .qty-btn { border-color: var(--green); color: var(--green); }
+  .dauber-card .qty-btn:hover { background: var(--green); color: white; }
+  .qty-display {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark);
+    min-width: 26px;
+    text-align: center;
+  }
+  .item-subtotal {
+    font-size: 0.8rem;
+    color: var(--brown);
+    font-weight: 700;
+    min-width: 44px;
+    text-align: right;
+  }
 
-    .item-card strong {
-      display: inline-block;
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-    }
+  /* Totals panel */
+  .totals-panel {
+    background: var(--cream);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px var(--shadow);
+  }
+  .totals-header {
+    background: var(--brown);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .totals-header span {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .totals-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.92rem;
+  }
+  .total-row .label { color: var(--brown); font-weight: 700; }
+  .total-row .value { font-weight: 700; color: var(--dark); }
+  .total-row.discount .value { color: var(--green); }
+  .total-row.discount .label { color: var(--green); }
+  .total-row.tax .value { color: var(--brown); }
+  .divider { height: 1px; background: rgba(107,76,42,0.2); margin: 4px 0; }
+  .total-row.grand { font-size: 1.3rem; }
+  .total-row.grand .label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--dark);
+  }
+  .total-row.grand .value { color: var(--accent); font-size: 1.4rem; }
 
-    /* Finger-friendly buttons */
-    .item-card button {
-      width: 100%;
-      min-height: 52px;          
-      padding: 14px 10px;
-      font-size: 1.15rem;
-      cursor: pointer;
-      border-radius: 10px;
-      margin-top: 8px;
-    }
+  /* Reset */
+  .reset-btn {
+    background: transparent;
+    border: 2px solid rgba(245,239,224,0.35);
+    color: rgba(245,239,224,0.65);
+    border-radius: 3px;
+    padding: 10px 20px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    align-self: center;
+  }
+  .reset-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(212,82,42,0.08);
+  }
 
-    .summary-card { text-align: left; }
-
-    .summary-card strong {
-      display: inline-block;
-      font-size: 1.2rem;
-      margin-bottom: 8px;
-    }
-
-    .summary-card h3 {
-      margin: 10px 0;
-      font-size: 1.25rem;
-    }
-
-    .summary-card button {
-      width: 100%;
-      min-height: 56px;
-      padding: 14px 10px;
-      font-size: 1.1rem;
-      border-radius: 10px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-
-    .summary-card ul {
-      margin: 10px 0 0;
-      padding-left: 20px;
-      max-height: 260px;
-      overflow: auto;
-      font-size: 1.05rem;
-    }
-
-    .summary-card li { margin: 6px 0; }
-
-    @media (max-width: 900px) {
-      .item-card { flex: 1 1 calc(50% - 10px); }
-    }
-
-    @media (max-width: 550px) {
-      html { font-size: 20px; }
-      body { margin: 12px; }
-
-      .item-card { flex: 1 1 100%; }
-
-      .item-card button {
-        min-height: 60px;
-        font-size: 1.25rem;
-      }
-
-      h2 { font-size: 1.8rem; }
-      .summary-card h3 { font-size: 1.35rem; }
-    }
-  </style>
+  /* Discount note */
+  .discount-note {
+    background: rgba(58,107,74,0.12);
+    border: 1px solid rgba(58,107,74,0.3);
+    border-radius: 3px;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    color: var(--green);
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+  .discount-note.hidden { display: none; }
+</style>
 </head>
-
 <body>
-  <h2>Store Calculator</h2>
+<div class="wrapper">
 
-  <div class="toggle-container">
-    <label>
-      <input type="checkbox" onchange="toggleDarkMode()" />
-      Dark Mode
-    </label>
-  </div>
-
-  <div class="grid">
-    <!-- $25 -->
-    <div class="item-card">
-      <strong>Shirts</strong><br />
-      <button class="price-btn" data-original="25" data-dark="20" onclick="addValue('Shirts', this)">$25</button>
-    </div>
-
-    <div class="item-card">
-      <strong>Tumblers</strong><br />
-      <button class="price-btn" data-original="25" data-dark="20" onclick="addValue('Tumblers', this)">$25</button>
-    </div>
-
-    <!-- $20 -->
-    <div class="item-card">
-      <strong>Coasters</strong><br />
-      <button class="price-btn" data-original="20" data-dark="15" onclick="addValue('Coaster (4 pack)', this)">$20</button>
-      <button class="price-btn" data-original="5" data-dark="5" onclick="addValue('Coaster (1)', this)">$5</button>
-    </div>
-
-    <!-- $15 -->
-    <div class="item-card">
-      <strong>Mugs</strong><br />
-      <button class="price-btn" data-original="15" data-dark="10" onclick="addValue('Mugs', this)">$15</button>
-    </div>
-
-    <div class="item-card">
-      <strong>Totes</strong><br />
-      <button class="price-btn" data-original="10" data-dark="10" onclick="addValue('Totes', this)">$10</button>
-    </div>
-
-    <div class="item-card">
-      <strong>Aprons</strong><br />
-      <button class="price-btn" data-original="15" data-dark="10" onclick="addValue('Aprons', this)">$15</button>
-    </div>
-
-    <!-- $5 -->
-    <div class="item-card">
-      <strong>Daubbers</strong><br />
-      <button class="price-btn" data-original="5" data-dark="5" onclick="addValue('Daubbers', this)">$5</button>
-    </div>
-
-    <div class="item-card">
-      <strong>Beanies</strong><br />
-      <button class="price-btn" data-original="5" data-dark="5" onclick="addValue('Beanies', this)">$5</button>
-    </div>
-
-    <!-- $1 -->
-    <div class="item-card">
-      <strong>Stickers</strong><br />
-      <button class="price-btn" data-original="1" data-dark="1" onclick="addValue('Stickers', this)">$1</button>
-    </div>
-
-    <div class="item-card">
-      <strong>Buttons</strong><br />
-      <button class="price-btn" data-original="1" data-dark="1" onclick="addValue('Buttons', this)">$1</button>
-    </div>
-
-    <!-- Card Fee -->
-    <div class="item-card">
-      <strong>Card Fee</strong><br />
-      <button onclick="addValue('Card Fee', null, 2)">$2</button>
-    </div>
-
-    <!-- Summary -->
-    <div class="item-card summary-card" id="summary">
-      <strong>Running Total</strong>
-      <h3>Subtotal: $<span id="subtotal">0.00</span></h3>
-      <h3>Tax (8.25%): $<span id="tax">0.00</span></h3>
-      <h3>Total: $<span id="total">0.00</span></h3>
-
-      <button onclick="clearAll()">Clear All</button>
-
-      <h3 style="margin-top: 14px;">Selected Items:</h3>
-      <ul id="selectedList"></ul>
+  <div class="header">
+    <div class="header-inner">
+      <h1>🛍 Merch Stand</h1>
+      <p>Register &amp; Calculator</p>
     </div>
   </div>
 
-  <script>
-    let subtotal = 0;
-    let darkMode = false;
-    const taxRate = 0.0825;
+  <div class="section-label">Items</div>
 
-    function updateTotals() {
-      const tax = subtotal * taxRate;
-      const total = subtotal + tax;
-      document.getElementById("subtotal").innerText = subtotal.toFixed(2);
-      document.getElementById("tax").innerText = tax.toFixed(2);
-      document.getElementById("total").innerText = total.toFixed(2);
-    }
+  <div class="items-grid" id="itemsGrid">
+    <!-- Cards injected by JS -->
+  </div>
 
-    function addValue(label, button, overrideAmount = null) {
-      let amount;
+  <div class="discount-note hidden" id="discountNote">
+    🎉 Dauber discount applied! −$5.00 off eligible items.
+  </div>
 
-      if (overrideAmount !== null) {
-        amount = overrideAmount;
-      } else {
-        amount = darkMode
-          ? parseFloat(button.dataset.dark)
-          : parseFloat(button.dataset.original);
-      }
+  <div class="totals-panel">
+    <div class="totals-header"><span>📋 Order Summary</span></div>
+    <div class="totals-body">
+      <div class="total-row">
+        <span class="label">Subtotal</span>
+        <span class="value" id="subtotalDisplay">$0.00</span>
+      </div>
+      <div class="total-row discount" id="discountRow" style="display:none">
+        <span class="label">Dauber Discount</span>
+        <span class="value" id="discountDisplay">−$0.00</span>
+      </div>
+      <div class="total-row tax">
+        <span class="label">Tax (8.25%)</span>
+        <span class="value" id="taxDisplay">$0.00</span>
+      </div>
+      <div class="divider"></div>
+      <div class="total-row grand">
+        <span class="label">Total</span>
+        <span class="value" id="grandDisplay">$0.00</span>
+      </div>
+    </div>
+  </div>
 
-      subtotal += amount;
-      updateTotals();
+  <button class="reset-btn" onclick="resetAll()">↺ Clear Order</button>
 
-      const li = document.createElement("li");
-      li.textContent = `${label}: $${amount.toFixed(2)}`;
-      document.getElementById("selectedList").appendChild(li);
-    }
+</div>
 
-    function clearAll() {
-      subtotal = 0;
-      updateTotals();
-      document.getElementById("selectedList").innerHTML = "";
-    }
+<script>
+const TAX_RATE = 0.0825;
+const DAUBER_DISCOUNT = 5.00;
 
-    function toggleDarkMode() {
-      darkMode = !darkMode;
-      document.body.classList.toggle("dark");
+const items = [
+  { id: 'shirt',    name: 'Shirt',            price: 20, emoji: '👕', eligible: true },
+  { id: 'apron',    name: 'Apron',            price: 10, emoji: '🧑‍🍳', eligible: true },
+  { id: 'coaster4', name: 'Coasters (4-Pack)', price: 10, emoji: '🟤', eligible: true },
+  { id: 'coaster',  name: 'Coaster (Single)',  price:  3, emoji: '⭕', eligible: false },
+  { id: 'mug',      name: 'Mug',              price:  7, emoji: '☕', eligible: true },
+  { id: 'tote',     name: 'Tote Bag',         price: 10, emoji: '👜', eligible: true },
+  { id: 'tumbler',  name: 'Tumbler',          price: 15, emoji: '🥤', eligible: true },
+  { id: 'dauber',   name: 'Dauber',           price:  5, emoji: '🖌️', isDauber: true, eligible: false },
+];
 
-      const buttons = document.querySelectorAll(".price-btn");
-      buttons.forEach((btn) => {
-        const price = darkMode ? btn.dataset.dark : btn.dataset.original;
-        btn.innerText = "$" + price;
-      });
-    }
-  </script>
+const quantities = {};
+items.forEach(i => quantities[i.id] = 0);
+
+function buildGrid() {
+  const grid = document.getElementById('itemsGrid');
+  grid.innerHTML = '';
+
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'item-card' + (item.isDauber ? ' dauber-card' : '');
+
+    const info = `
+      <div class="item-info">
+        <div class="item-name">${item.emoji} ${item.name}</div>
+        <div class="item-price">$${item.price.toFixed(2)} each</div>
+        ${item.isDauber ? '<div class="dauber-badge">Unlocks $5 Discount</div>' : ''}
+      </div>`;
+
+    const controls = `
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
+        <span class="qty-display" id="qty-${item.id}">0</span>
+        <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+        <span class="item-subtotal" id="sub-${item.id}"></span>
+      </div>`;
+
+    card.innerHTML = info + controls;
+    grid.appendChild(card);
+  });
+}
+
+function changeQty(id, delta) {
+  quantities[id] = Math.max(0, quantities[id] + delta);
+  document.getElementById('qty-' + id).textContent = quantities[id];
+  updateSubtotal(id);
+  recalculate();
+}
+
+function updateSubtotal(id) {
+  const item = items.find(i => i.id === id);
+  const qty = quantities[id];
+  const el = document.getElementById('sub-' + id);
+  el.textContent = qty > 0 ? '$' + (item.price * qty).toFixed(2) : '';
+}
+
+function recalculate() {
+  let subtotal = 0;
+  items.forEach(item => {
+    subtotal += item.price * quantities[item.id];
+  });
+
+  const hasDauber = quantities['dauber'] > 0;
+
+  // Eligible subtotal = subtotal minus daubers and single coasters
+  let eligibleSubtotal = 0;
+  items.forEach(item => {
+    if (item.eligible) eligibleSubtotal += item.price * quantities[item.id];
+  });
+
+  let discount = 0;
+  if (hasDauber && eligibleSubtotal > 0) {
+    discount = DAUBER_DISCOUNT;
+  }
+
+  const taxable = subtotal - discount;
+  const tax = Math.max(0, taxable) * TAX_RATE;
+  const grand = Math.max(0, taxable) + tax;
+
+  document.getElementById('subtotalDisplay').textContent = '$' + subtotal.toFixed(2);
+  document.getElementById('taxDisplay').textContent = '$' + tax.toFixed(2);
+  document.getElementById('grandDisplay').textContent = '$' + grand.toFixed(2);
+
+  const discountRow = document.getElementById('discountRow');
+  const discountNote = document.getElementById('discountNote');
+  if (discount > 0) {
+    discountRow.style.display = 'flex';
+    document.getElementById('discountDisplay').textContent = '−$' + discount.toFixed(2);
+    discountNote.classList.remove('hidden');
+  } else {
+    discountRow.style.display = 'none';
+    discountNote.classList.add('hidden');
+  }
+}
+
+function resetAll() {
+  items.forEach(i => {
+    quantities[i.id] = 0;
+    document.getElementById('qty-' + i.id).textContent = '0';
+    document.getElementById('sub-' + i.id).textContent = '';
+  });
+  recalculate();
+}
+
+buildGrid();
+recalculate();
+</script>
 </body>
 </html>
